@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITSVFATZ's download center</title>
+    <style>
+        /* Basic Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #4CAF50;
+            font-size: 2rem;
+        }
+
+        /* Folder Styling */
+        .folder {
+            display: inline-block;
+            background-color: #ffeb3b;
+            color: #333;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 150px;
+        }
+
+        .folder:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .folder .folder-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        /* File List Styling */
+        .file-list {
+            display: none;
+            margin-top: 10px;
+            text-align: left;
+            list-style-type: none;
+            padding: 0;
+            color: #555;
+        }
+
+        .file-list a {
+            text-decoration: none;
+            color: #4CAF50;
+            font-size: 1rem;
+            display: block;
+            padding: 8px 0;
+            transition: color 0.3s ease;
+        }
+
+        .file-list a:hover {
+            color: #388e3c;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>ITSVFATZ's download center</h1>
+
+    <div id="windows" class="folder">
+        <div class="folder-title">Windows ISO</div>
+        <ul class="file-list">
+            <li><a href="https://archive.org/details/windows-8-build-8102-x64" download="windows-iso1.iso">windows 8 build 8102</a></li>
+            <li><a href="https://archive.org/details/splash_20230516" download="windows-iso2.iso">windows 2000 alpha 64</a></li>
+            <li><a href="https://archive.org/details/nese_7_professional_25w6_beta_3.2_x64" download="document1.pdf">nese 7 update 6.0</a></li>
+            
+        </ul>
+    </div>
+
+    <div id="software" class="folder">
+        <div class="folder-title">Software</div>
+        <ul class="file-list">
+            <li><a href="https://example.com/software1.zip" download="software1.zip">Download Software 1</a></li>
+            <li><a href="https://example.com/software2.zip" download="software2.zip">Download Software 2</a></li>
+        </ul>
+    </div>
+
+    <div id="movie" class="folder">
+        <div class="folder-title">movie</div>
+        <ul class="file-list">
+            <li><a href="https://drive.google.com/drive/folders/1RG60MbPx61ozCgR3VIcI2nnrU09HYHg7" download="Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san-20241109T042018Z-001.zip">Alya</a></li>
+            <li><a href="https://example.com/document2.pdf" download="document2.pdf">Download Document 2</a></li>
+        </ul>
+    </div>
+    <div id="script" class="folder">
+        <div class="folder-title">coming soon</div>
+        <ul class="file-list">
+            <li><a href="https://example.com/document1.pdf" download="document1.pdf">Download Document 1</a></li>
+            <li><a href="https://example.com/document2.pdf" download="document2.pdf">Download Document 2</a></li>
+        </ul>
+    </div>
+
+    <script>
+        // Function to toggle the visibility of files in the folder
+        function toggleFolder(folderId) {
+            const fileList = document.querySelector(`#${folderId} .file-list`);
+            fileList.style.display = (fileList.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // Add click event to each folder
+        document.getElementById('windows').addEventListener('click', function() {
+            toggleFolder('windows');
+        });
+        document.getElementById('software').addEventListener('click', function() {
+            toggleFolder('software');
+        });
+        document.getElementById('movie').addEventListener('click', function() {
+            toggleFolder('movie');
+        });
+         document.getElementById('script').addEventListener('click', function() {
+            toggleFolder('script');
+        });
+        
+    </script>
+
+</body>
+</html>
