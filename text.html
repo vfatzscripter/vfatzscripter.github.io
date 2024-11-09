@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image to Emoji Art</title>
+    <style>
+        #emojiArt {
+            font-size: 5px; /* Adjust as needed */
+            line-height: 1; /* Adjust line height */
+            white-space: pre; /* Preserve whitespace */
+            overflow: auto; /* Allow scrolling */
+            max-height: 500px; /* Limit height */
+        }
+        #copyButton {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image to Emoji Art</h1>
+    <input type="file" id="imageInput" accept="image/*">
+    
+    <label for="gridSize">Select Grid Size:</label>
+    <select id="gridSize">
+        <option value="1">1x1</option>
+        <option value="2">2x2</option>
+        <option value="4">4x4</option>
+        <option value="8">8x8</option>
+        <option value="16">16x16</option>
+        <option value="32">32x32</option>
+        <option value="64">64x64</option>
+        <option value="128">128x128</option>
+        <option value="256">256x256</option>
+        <option value="512">512x512</option>
+        <option value="1000">1000x1000</option>
+        <option value="7x8">7x8</option>
+    </select>
+
+    <div id="emojiArt"></div>
+    <button id="copyButton" style="display:none;">Copy to Clipboard</button>
+
+    <script>
+        const emojiColors = {
+            '255,0,0': '🟥',     // Red
+            '255,165,0': '🟧',   // Orange
+            '255,255,0': '🟨',   // Yellow
+            '0,255,0': '🟩',     // Green
+            '0,0,255': '🟦',     // Blue
+            '128,0,128': '🟪',   // Purple
+            '139,69,19': '🟫',   // Brown
+            '0,0,0': '⬛',       // Black
+            '255,255,255': '⬜',  // White
+            '192,192,192': '⬜',  // Light Gray
+            '0,255,255': '🟦',   // Cyan
+            '255,0,255': '🟣',   // Magenta
+            '255,20,147': '💖',  // Deep Pink
+            '255,140,0': '🟧',   // Dark Orange
+            '34,139,34': '🟩',   // Forest Green
+            '0,0,128': '🟦',     // Navy Blue
+            '255,228,196': '🍦', // Light Pink
+            '255,99,71': '🍅',   // Tomato
+            '255,105,180': '💗', // Hot Pink
+            '60,179,113': '🌿',  // Medium Sea Green
+            '100,149,237': '🌈', // Cornflower Blue
+            '123,104,238': '💜', // Medium Slate Blue
+            '0,191,255': '💧',   // Deep Sky Blue
+            '255,228,181': '🍰', // Light Apricot
+            '173,216,230': '🌊', // Light Blue
+            '255,228,225': '🌸', // Light Pink
+            // Add more colors as needed...
+        };
+
+        function closestColor(r, g, b) {
+            let minDistance = Infinity;
+            let closestColor = '';
+            for (let key in emojiColors) {
+                const [cr, cg, cb] = key.split(',').map(Number);
+                const distance = Math.sqrt((r - cr) ** 2 + (g - cg) ** 2 + (b - cb) ** 2);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestColor = emojiColors[key];
+                }
+            }
+            return closestColor;
+        }
+
+        function imageToEmojiArt(img, size) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = size;
+            canvas.height = size;
+
+            ctx.drawImage(img, 0, 0, size, size);
+            const imageData = ctx.getImageData(0, 0, size, size);
+            let emojiArt = '';
+
+            for (let y = 0; y < size; y++) {
+                for (let x = 0; x < size; x++) {
+                    const index = (y * size + x) * 4;
+                    const r = imageData.data[index];
+                    const g = imageData.data[index + 1];
+                    const b = imageData.data[index + 2];
+                    const emoji = closestColor(r, g, b);
+                    emojiArt += emoji;
+                }
+                emojiArt += '\n';
+            }
+
+            document.getElementById('emojiArt').innerText = emojiArt;
+            document.getElementById('copyButton').style.display = 'block';
+        }
+
+        document.getElementById('imageInput').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            const img = new Image();
+            const size = parseInt(document.getElementById('gridSize').value);
+            img.onload = () => {
+                imageToEmojiArt(img, size);
+            };
+            img.src = URL.createObjectURL(file);
+        });
+
+        document.getElementById('copyButton').addEventListener('click', () => {
+            const emojiArt = document.getElementById('emojiArt').innerText;
+            navigator.clipboard.writeText(emojiArt).then(() => {
+                alert('Emoji art copied to clipboard!');
+            });
+        });
+    </script>
+</body>
+</html>

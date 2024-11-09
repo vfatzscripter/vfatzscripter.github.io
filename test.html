@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Font Text Box</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .error-output {
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid red;
+            border-radius: 4px;
+            color: red;
+            background-color: #f2dede;
+            min-height: 100px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .input-box {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .slider {
+            width: 100%;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Error Font Text Box</h1>
+        <textarea class="input-box" id="inputText" rows="4" placeholder="Enter your text here..." oninput="updateOutput()"></textarea>
+        <div class="slider-container">
+            <label for="difficultySlider">Glitch Level:</label>
+            <input type="range" id="difficultySlider" class="slider" min="1" max="100" value="1" oninput="updateOutput()">
+        </div>
+        <div class="font-container">
+            <label for="fontSelect">Choose Font:</label>
+            <select id="fontSelect" onchange="updateOutput()">
+                <option value="error">Error Font</option>
+                <option value="zalgo">Zalgo Text</option>
+                <option value="glitch">Glitch Effect</option>
+            </select>
+        </div>
+        <textarea class="error-output" id="outputText" readonly></textarea>
+    </div>
+
+    <script>
+        function updateOutput() {
+            var inputText = document.getElementById('inputText').value;
+            var outputText = document.getElementById('outputText');
+            var font = document.getElementById('fontSelect').value;
+            var difficultyLevel = document.getElementById('difficultySlider').value;
+
+            if (font === 'zalgo') {
+                outputText.value = zalgo(inputText, difficultyLevel);
+            } else {
+                outputText.value = inputText;
+            }
+
+            updateFont(difficultyLevel);
+        }
+
+        function updateFont(difficultyLevel) {
+            var outputText = document.getElementById('outputText');
+            var font = document.getElementById('fontSelect').value;
+
+            if (font === 'error') {
+                outputText.style.fontFamily = 'Courier New, Courier, monospace';
+                outputText.style.textShadow = 'none';
+            } else if (font === 'zalgo') {
+                outputText.style.fontFamily = 'Courier New, Courier, monospace';
+                outputText.style.textShadow = 'none';
+            } else if (font === 'glitch') {
+                outputText.style.fontFamily = 'monospace';
+                outputText.style.textShadow = `${difficultyLevel / 10}px ${difficultyLevel / 10}px red, -${difficultyLevel / 10}px -${difficultyLevel / 10}px blue`;
+            }
+        }
+
+        function zalgo(text, level) {
+            var zalgoUp = ['̍','̎','̄','̅','̿','̑','̆','̐','͒','͗','͑','̇','̈','̊','͂','̓','̈','͊','͋','͌','̃','̂','̌','͐','̀','́','̋','̏','̒','̿'];
+            var zalgoDown = ['̖','̗','̘','̙','̜','̝','̞','̟','̠','̤','̥','̦','̩','̪','̫','̬','̭','̮','̯','̰','̱','̲','̳','̹','̺','̻','̼','ͅ','͇','͈','͉','͍','͎','͓','͔','͕','͖','͙','͚','̣'];
+            var zalgoMid = ['̕','̛','̀','́','͘','̡','̢','̧','̨','̴','̵','̶','͜','͝','͞','͟','͠','͢','̸','̷','͡',' ҉'];
+
+            var result = '';
+            for (var i = 0; i < text.length; i++) {
+                result += text[i];
+                var numUp = Math.floor(Math.random() * level / 10);
+                var numMid = Math.floor(Math.random() * level / 20);
+                var numDown = Math.floor(Math.random() * level / 10);
+                for (var j = 0; j < numUp; j++) {
+                    result += zalgoUp[Math.floor(Math.random() * zalgoUp.length)];
+                }
+                for (var j = 0; j < numMid; j++) {
+                    result += zalgoMid[Math.floor(Math.random() * zalgoMid.length)];
+                }
+                for (var j = 0; j < numDown; j++) {
+                    result += zalgoDown[Math.floor(Math.random() * zalgoDown.length)];
+                }
+            }
+            return result;
+        }
+    </script>
+</body>
+</html>
