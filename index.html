@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image and Drawing to Text</title>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            color: #333;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        #canvas {
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+        pre {
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            overflow: auto;
+        }
+        input[type="number"],
+        input[type="file"],
+        button,
+        select,
+        input[type="range"] {
+            background-color: #ccc;
+            color: #333;
+            border: none;
+            padding: 8px;
+            margin: 5px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        input[type="number"],
+        input[type="file"] {
+            width: 100px;
+        }
+        button {
+            background-color: #008cba;
+        }
+        button:hover {
+            background-color: #005f6b;
+        }
+        select {
+            width: 150px;
+        }
+        textarea {
+            width: 90%;
+            height: 100px;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Img to Text by ChatGPT</h1>
+    <input type="number" id="imageSizeInput" placeholder="Image Size">
+    <input type="file" id="imageInput" accept="image/*">
+    <button id="convertImageButton">Convert Image to ASCII</button>
+    <canvas id="canvas"></canvas>
+    <button id="toggleButton">Start Drawing</button>
+    <button id="convertDrawingButton">Convert Drawing to ASCII</button>
+    <input type="number" id="brushSizeInput" value="5">
+    <button id="setBrushSizeButton">Set Brush Size</button>
+    <input type="range" id="asciiSizeSlider" min="10" max="30" value="20">
+    <select id="symbolSelect">
+        <option value=" .:-=+*#%@">Symbols Set 1</option>
+        <option value=" .,:;i1tfLCG08@">Symbols Set 2</option>
+        <option value=" ░▒▓█">Shades of Gray</option>
+        <option value="" id="customSymbolOption">Custom</option>
+    </select>
+    <input type="text" id="customSymbolInput" placeholder="Custom Symbols">
+    <label for="xPos">X Position:</label>
+    <input type="range" id="xPos" min="-100" max="100" value="0">
+    <input type="number" id="xPosInput" value="0">
+    <label for="yPos">Y Position:</label>
+    <input type="range" id="yPos" min="-100" max="100" value="0">
+    <input type="number" id="yPosInput" value="0">
+    <label for="zPos">Z Position:</label>
+    <input type="range" id="zPos" min="-100" max="100" value="0">
+    <input type="number" id="zPosInput" value="0">
+    <label for="numBox">Number:</label>
+    <input type="number" id="numBox" min="1" value="1">
+    <pre id="asciiOutput"></pre>
+    <textarea id="asciiCopyBox" readonly></textarea>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        let isDrawing = false;
+        let brushSize = 5;
+
+        function startDrawing() {
+            isDrawing = true;
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function draw(x, y, isDrawing) {
+            if (isDrawing) {
+                context.lineWidth = brushSize;
+                context.lineCap = 'round';
+                context.lineTo(x, y);
+                context.stroke();
+            } else {
+                context.beginPath();
+                context.moveTo(x, y);
+            }
+        }
+
+        canvas.addEventListener('mousedown', (event) => {
+            startDrawing();
+            draw(event.clientX - canvas.offsetLeft, event.clientY - canvas.offsetTop, true);
+        });
+
+        canvas.addEventListener('mousemove', (event) => {
+            if (isDrawing) {
+                draw(event.clientX - canvas.offsetLeft, event.clientY - canvas.offsetTop, true);
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            stopDrawing();
+        });
+
+        document.getElementById('setBrushSizeButton').addEventListener('click', () => {
+            brushSize = parseInt(document.getElementById('brushSizeInput').value);
+        });
+
+        function convertImageToAscii() {
+            const input = document.getElementById('imageInput');
+            const imageSize = parseInt(document.getElementById('imageSizeInput').value);
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = new Image();
+                    img.onload = function () {
+                        const asciiArt = imageToAscii(img, imageSize, imageSize);
+                        document.getElementById('asciiOutput').innerText = asciiArt;
+                        document.getElementById('asciiCopyBox').innerText = asciiArt; // Update copy box
+                    }
+                    img.src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        document.getElementById('convertImageButton').addEventListener('click', convertImageToAscii);
+
+        document.getElementById('toggleButton').addEventListener('click', () => {
+            if (isDrawing) {
+                stopDrawing();
+                document.getElementById('toggleButton').innerText = 'Start Drawing';
+            } else {
+                startDrawing();
+                document.getElementById('toggleButton').innerText = 'Stop Drawing';
+            }
+        });
+
+        document.getElementById('convertDrawingButton').addEventListener('click', () => {
+            const asciiArt = canvasToAscii(canvas);
+            document.getElementById('asciiOutput').innerText = asciiArt;
+            document.getElementById('asciiCopyBox').innerText = asciiArt; // Update copy box
+        });
+
+        document.getElementById('asciiSizeSlider').addEventListener('input', () => {
+            const newSize = document.getElementById('asciiSizeSlider').value;
+            document.getElementById('asciiOutput').style.fontSize = newSize + 'px';
+        });
+
+        function canvasToAscii(canvas) {
+            const imageData = context.getImageData(0, 0, canvas.width, canvas.height).data;
+            const selectedSymbols = getSelectedSymbols();
+            const asciiArt = [];
+            const symbolCount = selectedSymbols.length;
+
+            for (let i = 0; i < imageData.length; i += 4) {
+                const brightness = (imageData[i] + imageData[i + 1] + imageData[i + 2]) / 3;
+                const charIndex = Math.floor(brightness / (255 / symbolCount));
+                asciiArt.push(selectedSymbols.charAt(charIndex));
+                if ((i / 4) % canvas.width === canvas.width - 1) {
+                    asciiArt.push('\n');
+                }
+            }
+
+            return asciiArt.join('');
+        }
+
+        function imageToAscii(img, width, height) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const selectedSymbols = getSelectedSymbols();
+            const asciiArt = [];
+            const symbolCount = selectedSymbols.length;
+
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const imageData = ctx.getImageData(0, 0, width, height).data;
+
+            for (let i = 0; i < imageData.length; i += 4) {
+                const brightness = (imageData[i] + imageData[i + 1] + imageData[i + 2]) / 3;
+                const charIndex = Math.floor(brightness / (255 / symbolCount));
+                asciiArt.push(selectedSymbols.charAt(charIndex));
+                if ((i / 4) % width === width - 1) {
+                    asciiArt.push('\n');
+                }
+            }
+            return asciiArt.join('');
+        }
+
+        function getSelectedSymbols() {
+            const customOption = document.getElementById('customSymbolOption');
+            const symbolSelect = document.getElementById('symbolSelect');
+            if (symbolSelect.value === '' && customOption.selected) {
+                return document.getElementById('customSymbolInput').value;
+            } else {
+                return symbolSelect.value;
+            }
+        }
+
+        document.getElementById('symbolSelect').addEventListener('change', () => {
+            const customOption = document.getElementById('customSymbolOption');
+            const symbolSelect = document.getElementById('symbolSelect');
+            if (symbolSelect.value === '') {
+                customOption.style.display = 'block';
+            } else {
+                customOption.style.display = 'none';
+            }
+        });
+
+        document.getElementById('xPos').addEventListener('input', () => {
+            const xPosValue = document.getElementById('xPos').value;
+            document.getElementById('xPosInput').value = xPosValue;
+        });
+
+        document.getElementById('yPos').addEventListener('input', () => {
+            const yPosValue = document.getElementById('yPos').value;
+            document.getElementById('yPosInput').value = yPosValue;
+        });
+
+        document.getElementById('zPos').addEventListener('input', () => {
+            const zPosValue = document.getElementById('zPos').value;
+            document.getElementById('zPosInput').value = zPosValue;
+        });
+    </script>
+</body>
+</html>
