@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MP3 Downloader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>MP3 Downloader</h2>
+    <p>Enter the URL of the MP3 file you want to download:</p>
+    <input type="text" id="mp3-url" placeholder="Enter MP3 URL">
+    <br><br>
+    <button onclick="downloadMP3()">Download MP3</button>
+    <br><br>
+    <div id="status"></div>
+</div>
+
+<script>
+    function downloadMP3() {
+        const url = document.getElementById('mp3-url').value;
+        const statusDiv = document.getElementById('status');
+
+        if (url) {
+            // Check if the URL ends with ".mp3"
+            if (url.endsWith('.mp3')) {
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = url.split('/').pop(); // Use the file name from the URL
+                a.textContent = 'Click here if the download doesn\'t start automatically';
+
+                // Trigger the download
+                a.click();
+                
+                statusDiv.innerHTML = 'Downloading MP3...';
+            } else {
+                statusDiv.innerHTML = 'Please enter a valid MP3 URL.';
+            }
+        } else {
+            statusDiv.innerHTML = 'Please enter a URL.';
+        }
+    }
+</script>
+
+</body>
+</html>
