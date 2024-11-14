@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube MP3 Downloader</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>YouTube MP3 Downloader</h1>
+    <label for="url">Enter YouTube URL:</label>
+    <input type="text" id="url" placeholder="Paste YouTube URL here">
+    
+    <label for="quality">Select Quality (MP4 Video):</label>
+    <select id="quality">
+      <option value="1080p">1080p</option>
+      <option value="720p">720p</option>
+      <option value="480p">480p</option>
+      <option value="360p">360p</option>
+      <option value="audio">MP3 (Audio only)</option>
+    </select>
+    
+    <button id="downloadBtn">Download MP3</button>
+  </div>
+
+  <script>
+    document.getElementById("downloadBtn").addEventListener("click", function() {
+      const url = document.getElementById("url").value;
+      const quality = document.getElementById("quality").value;
+
+      if (!url) {
+        alert("Please enter a YouTube URL!");
+        return;
+      }
+
+      // Send the URL and quality to the backend for processing
+      fetch('https://your-backend-server-url/download', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          url: url,
+          quality: quality
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert("Download started! Check your downloads.");
+        } else {
+          alert("Failed to download. Please try again.");
+        }
+      })
+      .catch(err => {
+        console.error("Error:", err);
+        alert("An error occurred.");
+      });
+    });
+  </script>
+</body>
+</html>
