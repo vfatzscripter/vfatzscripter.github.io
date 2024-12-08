@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Animation with Style Selector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            font-size: 40px;
+        }
+        #shuffleText {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px;
+            font-weight: bold;
+        }
+        #percentageText {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 35px;
+            color: #FF6347; /* Red color for the percentage */
+        }
+        select {
+            font-size: 20px;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Select Animation Style</h1>
+    <select id="animationSelect">
+        <option value="style1">Shuffle + Percentage Animation</option>
+        <option value="style2">Only Percentage Animation</option>
+    </select>
+
+    <div id="shuffleText">Hi</div>
+    <div id="percentageText">0% love you</div>
+
+    <script>
+        // Initial setup
+        const textElement = document.getElementById("shuffleText");
+        const initialText = "Hi";
+        const revealText = "Hello";  // Word to reveal after shuffle
+        const percentageElement = document.getElementById("percentageText");
+
+        let shuffleInterval;
+        let percentage = 0;
+        const targetPercentage = 694;  // Target percentage after 100%
+
+        // Function to shuffle "H" and "I" with random spaces
+        function shuffleText() {
+            const chars = ["H", "I"];
+            let shuffledText = "";
+
+            for (let i = 0; i < chars.length; i++) {
+                // Randomly decide whether to add a space after each character
+                if (Math.random() > 0.5) {
+                    shuffledText += chars[i] + " "; // Add space after the character
+                } else {
+                    shuffledText += chars[i]; // No space
+                }
+            }
+
+            // Shuffle between the characters in random order
+            if (Math.random() > 0.5) {
+                shuffledText = shuffledText.trim(); // Keep no space
+            }
+
+            textElement.textContent = shuffledText;
+        }
+
+        // Function to increment percentage
+        function incrementPercentage() {
+            if (percentage <= 100) {
+                percentage++;
+            } else if (percentage < targetPercentage) {
+                percentage += 2;  // Faster increment after reaching 100%
+            }
+            percentageElement.textContent = `${percentage}% love you`;
+
+            if (percentage < targetPercentage) {
+                setTimeout(incrementPercentage, 50);  // Increase the speed of percentage change
+            }
+        }
+
+        // Function to reveal the word after shuffle
+        function revealWord() {
+            textElement.textContent = revealText;
+        }
+
+        // Function to handle the selected animation style
+        function startAnimation() {
+            // Get the selected style
+            const selectedStyle = document.getElementById("animationSelect").value;
+
+            // Clear previous animations
+            clearInterval(shuffleInterval);
+            percentageElement.textContent = "0% love you";
+            textElement.textContent = initialText;
+
+            if (selectedStyle === "style1") {
+                // Start shuffle and percentage animation
+                startShuffling();
+                setTimeout(() => {
+                    incrementPercentage();
+                }, 1000);  // Start after 1 second
+                setTimeout(() => {
+                    clearInterval(shuffleInterval);
+                    revealWord();
+                }, 5000);  // Shuffle for 5 seconds
+            } else if (selectedStyle === "style2") {
+                // Only percentage animation
+                percentageElement.textContent = "0% love you";
+                incrementPercentage();
+            }
+        }
+
+        // Start shuffling animation
+        function startShuffling() {
+            shuffleInterval = setInterval(shuffleText, 300);  // Change the interval to control speed
+        }
+
+        // Listen for select menu changes and apply the selected animation style
+        document.getElementById("animationSelect").addEventListener("change", startAnimation);
+
+        // Start with default animation on page load
+        startAnimation();
+
+    </script>
+</body>
+</html>
