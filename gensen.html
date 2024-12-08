@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Roasting, Apology, and Rizz Sentence Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #generated-sentence {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #FF6347;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Random Roasting, Apology, and Rizz Sentence Generator</h1>
+    <p>Click the button to generate a random roast, apology, or rizz (flirt) sentence!</p>
+
+    <button onclick="generateSentence('roast')">Generate Roast Sentence</button>
+    <button onclick="generateSentence('apology')">Generate Apology Sentence</button>
+    <button onclick="generateSentence('rizz')">Generate Rizz Sentence</button>
+
+    <p id="generated-sentence"></p>
+
+    <script>
+        const roastTemplates = [
+            "You're like a {word}, but even less useful.",
+            "If brains were gold, you'd be a {word} with no value.",
+            "You're not the brightest {word} in the box, are you?",
+            "If I had a dollar for every time you said something intelligent, I’d still be poorer than a {word}.",
+            "Your IQ is lower than a {word}'s shoe size.",
+            "You know, even a {word} can do better than you.",
+            "You're the {word} of the class, and that's saying something.",
+            "I can’t believe you managed to be more annoying than a {word}.",
+            "You’re as sharp as a {word} in a room full of geniuses.",
+            "You have the personality of a {word} on a bad day.",
+            "You're like a {word} trying to solve a Rubik's cube — completely lost.",
+            "You're like a {word} trying to do math; it’s just not going to happen.",
+            "If I had a nickel for every time you said something intelligent, I'd still have to ask a {word} for help.",
+            "You must be a {word} because you seem to exist only to cause chaos.",
+            "Calling you a {word} is an insult to {word}s everywhere.",
+            "You're about as useful as a {word} at a rocket science conference.",
+            "Even a {word} knows how to make better decisions than you.",
+            "If I had a brain like yours, I'd be a {word}.",
+            "You could win an award for being the best {word} in a room full of {word}s.",
+            "You're as productive as a {word} in a hammock.",
+            "You couldn't solve a {word}'s problem if it was handed to you on a silver platter.",
+            "You're about as helpful as a {word} trying to find its way out of a maze.",
+            "You're a {word} trying to pass for a genius. It's not working.",
+            "You're like a {word} in a race — slow, clumsy, and out of place.",
+            "You could be the mascot for the {word} team: losers all around.",
+            "Even a {word} can hold an intelligent conversation. You can't."
+        ];
+
+        const apologyTemplates = [
+            "I'm really sorry for {action}, it wasn't my intention to {effect}.",
+            "Please accept my deepest apologies for {action}. I understand how it made you feel {emotion}.",
+            "I owe you an apology for {action}. It was thoughtless, and I truly regret it.",
+            "I messed up, and I sincerely apologize for {action}. I know it caused you {effect}.",
+            "I apologize for {action}. It was wrong, and I will do better next time.",
+            "I'm sorry for {action}. It was inconsiderate, and I understand the impact it had on you.",
+            "I regret that I {action}. It wasn't intended, and I apologize for any distress caused.",
+            "I want to apologize for {action}. I realize it was hurtful, and I truly regret my actions.",
+            "I'm deeply sorry for {action}. I never meant for it to cause you any {emotion}.",
+            "Please forgive me for {action}. I realize it was wrong, and I'm truly sorry."
+        ];
+
+        const rizzTemplates = [
+            "Are you a magician? Because whenever I look at you, everyone else disappears.",
+            "Do you have a name, or can I call you mine?",
+            "Are you French? Because Eiffel for you.",
+            "Is your name Google? Because you have everything I've been searching for.",
+            "If I were a cat, I'd spend all 9 lives with you.",
+            "Are you made of copper and tellurium? Because you're Cu-Te.",
+            "Is your dad an artist? Because you're a masterpiece.",
+            "Do you have a map? Because I keep getting lost in your eyes.",
+            "Are you a parking ticket? Because you've got 'FINE' written all over you.",
+            "Do you believe in love at first sight, or should I walk by again?",
+            "Are you a campfire? Because you're hot and I want s'more.",
+            "Is your name Wi-Fi? Because I'm feeling a connection.",
+            "You must be tired because you've been running through my mind all day.",
+            "If I could rearrange the alphabet, I’d put U and I together.",
+            "Are you a time traveler? Because I see you in my future.",
+            "If beauty were a crime, you'd be serving a life sentence."
+        ];
+
+        function generateSentence(type) {
+            if (type === 'roast') {
+                const randomWord = generateRandomWord();
+                const randomTemplate = roastTemplates[Math.floor(Math.random() * roastTemplates.length)];
+                const generatedSentence = randomTemplate.replace("{word}", randomWord);
+                document.getElementById("generated-sentence").innerText = generatedSentence;
+            } else if (type === 'apology') {
+                const randomAction = generateRandomAction();
+                const randomEffect = generateRandomEffect();
+                const randomEmotion = generateRandomEmotion();
+                const randomTemplate = apologyTemplates[Math.floor(Math.random() * apologyTemplates.length)];
+                const apologySentence = randomTemplate.replace("{action}", randomAction)
+                                                     .replace("{effect}", randomEffect)
+                                                     .replace("{emotion}", randomEmotion);
+                document.getElementById("generated-sentence").innerText = apologySentence;
+            } else if (type === 'rizz') {
+                const randomTemplate = rizzTemplates[Math.floor(Math.random() * rizzTemplates.length)];
+                document.getElementById("generated-sentence").innerText = randomTemplate;
+            }
+        }
+
+        function generateRandomWord() {
+            const randomLength = Math.floor(Math.random() * (8 - 3 + 1)) + 3;
+            const randomWord = Array.from({ length: randomLength }, () => String.fromCharCode(Math.floor(Math.random() * 26) + 97)).join('');
+            return randomWord;
+        }
+
+        function generateRandomAction() {
+            const actions = ["ignoring you", "forgetting your birthday", "being rude", "not listening", "making that mistake again"];
+            return actions[Math.floor(Math.random() * actions.length)];
+        }
+
+        function generateRandomEffect() {
+            const effects = ["hurt", "disappointed", "angry", "sad", "confused"];
+            return effects[Math.floor(Math.random() * effects.length)];
+        }
+
+        function generateRandomEmotion() {
+            const emotions = ["regret", "frustration", "disappointment", "hurt", "confusion"];
+            return emotions[Math.floor(Math.random() * emotions.length)];
+        }
+    </script>
+
+</body>
+</html>
