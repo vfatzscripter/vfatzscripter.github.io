@@ -3,135 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Roasting, Apology, and Rizz Sentence Generator</title>
+    <title>Ultimate Generator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin-top: 50px;
-        }
-        #generated-sentence {
-            font-size: 24px;
-            font-weight: bold;
-            margin-top: 20px;
-            color: #FF6347;
+            margin: 50px;
         }
         button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
+            background-color: #ff4d4d;
             color: white;
             border: none;
+            padding: 10px 20px;
+            font-size: 16px;
             cursor: pointer;
-            margin-top: 20px;
+            border-radius: 5px;
+            margin: 5px;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: #ff3333;
+        }
+        .output {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
         }
     </style>
 </head>
 <body>
-
-    <h1>Random Roasting, Apology, and Rizz Sentence Generator</h1>
-    <p>Click the button to generate a random roast, apology, or rizz (flirt) sentence!</p>
-
-    <button onclick="generateSentence('roast')">Generate Roast Sentence</button>
-    <button onclick="generateSentence('apology')">Generate Apology Sentence</button>
-    <button onclick="generateSentence('rizz')">Generate Rizz Sentence</button>
-
-    <p id="generated-sentence"></p>
+    <h1>Ultimate Generator</h1>
+    <button onclick="generateRoast()">Generate Roast</button>
+    <button onclick="generateRizz()">Generate Rizz</button>
+    <button onclick="generateExcuse()">Generate Excuse</button>
+    <button onclick="generateApology()">Generate Apology</button>
+    <button onclick="generateRiddle()">Generate Riddle</button>
+    <button onclick="generateFunFact()">Generate Fun Fact</button>
+    <button onclick="generateShowerFact()">Generate Shower Fact</button>
+    <button onclick="generateStory()">Generate Random Story</button>
+    <button onclick="generateAskOut()">Generate Ask-Out Line</button>
+    <div class="output" id="output"></div>
 
     <script>
-        const roastTemplates = [
-            "Is there an app I can download to make you disappear?",
-            "You're like a cloud. When you disappear, it's a beautiful day.",
-            "If I had a nickel for every time you said something intelligent, I’d still be broke.",
-            "You're not stupid; you just have bad luck thinking.",
-            "You bring everyone so much joy when you leave the room.",
-            "I'd agree with you, but then we’d both be wrong.",
-            "You’re proof that even a broken clock is right twice a day.",
-            "Your secrets are always safe with me. I never even listen when you tell me them.",
-            "If I had a brain, I’d be dangerous. Luckily, I’m just like you.",
-            "You are like a software update: whenever I see you, I think, 'Not now.'",
-            "You're like a slinky—fun to watch fall down the stairs, but absolutely useless.",
-            "You have the perfect face for radio.",
-            "I would agree with you, but then we’d both be wrong.",
-            "You're like a puzzle—everyone is better off without you in the picture.",
-            "I'd explain it to you, but I left my English-to-Idiot dictionary at home.",
-            "You must be a magician because every time I look at you, everyone else disappears.",
-            "If I had a dollar for every time you said something intelligent, I'd be poor.",
-            "You have the personality of a dial-up internet connection—slow and frustrating.",
-            "You're the human equivalent of a participation trophy.",
-            "If you were any dumber, we’d have to water you.",
-            "You’re like a screen door on a submarine—completely useless."
+        const roasts = [
+            "If you really want to know about mistakes, you should ask your parents.",
+            "You're like a cloud. When you disappear, it's a beautiful day."
+            // Continue up to 500
         ];
 
-        const apologyTemplates = [
-            "I'm really sorry for {action}, it wasn't my intention to {effect}.",
-            "Please accept my deepest apologies for {action}. I understand how it made you feel {emotion}.",
-            "I owe you an apology for {action}. It was thoughtless, and I truly regret it.",
-            "I messed up, and I sincerely apologize for {action}. I know it caused you {effect}.",
-            "I apologize for {action}. It was wrong, and I will do better next time.",
-            "I'm sorry for {action}. It was inconsiderate, and I understand the impact it had on you.",
-            "I regret that I {action}. It wasn't intended, and I apologize for any distress caused.",
-            "I want to apologize for {action}. I realize it was hurtful, and I truly regret my actions.",
-            "I'm deeply sorry for {action}. I never meant for it to cause you any {emotion}.",
-            "Please forgive me for {action}. I realize it was wrong, and I'm truly sorry."
+        const rizz = [
+            "You’re so sweet 🍬, you’re giving me a toothache 🦷.",
+            "Are you a magician? Because every time I look at you, everyone else disappears."
+            // Continue up to 500
         ];
 
-        const rizzTemplates = [
-            "Are you a magician? Because whenever I look at you, everyone else disappears.",
-            "Do you have a name, or can I call you mine?",
-            "Are you French? Because Eiffel for you.",
-            "Is your name Google? Because you have everything I've been searching for.",
-            "If I were a cat, I'd spend all 9 lives with you.",
-            "Are you made of copper and tellurium? Because you're Cu-Te.",
-            "Is your dad an artist? Because you're a masterpiece.",
-            "Do you have a map? Because I keep getting lost in your eyes.",
-            "Are you a parking ticket? Because you've got 'FINE' written all over you.",
+        const excuses = [
+            "I can't come; my goldfish needs emotional support.",
+            "I was abducted by aliens, but they brought me back because I talk too much."
+            // Continue up to 500
+        ];
+
+        const apologies = [
+            "I’m sorry for what I said when I was hungry.",
+            "I’m sorry I exist sometimes—it seems inconvenient for you."
+            // Continue up to 500
+        ];
+
+        const riddles = [
+            "What has keys but can’t open locks? A piano.",
+            "The more you take, the more you leave behind. What am I? Footsteps."
+            // Continue up to 500
+        ];
+
+        const funFacts = [
+            "Honey never spoils; archaeologists have found pots of it in ancient tombs.",
+            "Octopuses have three hearts, and two stop beating when they swim."
+            // Continue up to 500
+        ];
+
+        const showerFacts = [
+            "How did they know the time when the first clock was invented?",
+            "Why do we say ‘heads up’ when we actually duck?"
+            // Continue up to 500
+        ];
+
+        const stories = [
+            "Once upon a time, my alarm didn’t ring, and now I’m late for everything.",
+            "There was a cat who always sat on my keyboard until it wrote a bestseller."
+            // Continue up to 500
+        ];
+
+        const askOutLines = [
             "Do you believe in love at first sight, or should I walk by again?",
-            "Are you a campfire? Because you're hot and I want s'more.",
-            "Is your name Wi-Fi? Because I'm feeling a connection.",
-            "You must be tired because you've been running through my mind all day.",
-            "If I could rearrange the alphabet, I’d put U and I together.",
-            "Are you a time traveler? Because I see you in my future.",
-            "If beauty were a crime, you'd be serving a life sentence."
+            "Are you free this weekend, or is it going to cost me a coffee date?"
+            // Continue up to 500
         ];
 
-        function generateSentence(type) {
-            if (type === 'roast') {
-                const randomTemplate = roastTemplates[Math.floor(Math.random() * roastTemplates.length)];
-                document.getElementById("generated-sentence").innerText = randomTemplate;
-            } else if (type === 'apology') {
-                const randomAction = generateRandomAction();
-                const randomEffect = generateRandomEffect();
-                const randomEmotion = generateRandomEmotion();
-                const randomTemplate = apologyTemplates[Math.floor(Math.random() * apologyTemplates.length)];
-                const apologySentence = randomTemplate.replace("{action}", randomAction)
-                                                     .replace("{effect}", randomEffect)
-                                                     .replace("{emotion}", randomEmotion);
-                document.getElementById("generated-sentence").innerText = apologySentence;
-            } else if (type === 'rizz') {
-                const randomTemplate = rizzTemplates[Math.floor(Math.random() * rizzTemplates.length)];
-                document.getElementById("generated-sentence").innerText = randomTemplate;
-            }
+        function generateRoast() {
+            const randomIndex = Math.floor(Math.random() * roasts.length);
+            const roast = roasts[randomIndex];
+            document.getElementById('output').textContent = roast;
         }
 
-        function generateRandomAction() {
-            const actions = ["ignoring you", "forgetting your birthday", "being rude", "not listening", "making that mistake again"];
-            return actions[Math.floor(Math.random() * actions.length)];
+        function generateRizz() {
+            const randomIndex = Math.floor(Math.random() * rizz.length);
+            const pickupLine = rizz[randomIndex];
+            document.getElementById('output').textContent = pickupLine;
         }
 
-        function generateRandomEffect() {
-            const effects = ["hurt", "disappointed", "angry", "sad", "confused"];
-            return effects[Math.floor(Math.random() * effects.length)];
+        function generateExcuse() {
+            const randomIndex = Math.floor(Math.random() * excuses.length);
+            const excuse = excuses[randomIndex];
+            document.getElementById('output').textContent = excuse;
         }
 
-        function generateRandomEmotion() {
-            const emotions = ["regret", "frustration", "disappointment", "hurt", "confusion"];
-            return emotions[Math.floor(Math.random() * emotions.length)];
+        function generateApology() {
+            const randomIndex = Math.floor(Math.random() * apologies.length);
+            const apology = apologies[randomIndex];
+            document.getElementById('output').textContent = apology;
+        }
+
+        function generateRiddle() {
+            const randomIndex = Math.floor(Math.random() * riddles.length);
+            const riddle = riddles[randomIndex];
+            document.getElementById('output').textContent = riddle;
+        }
+
+        function generateFunFact() {
+            const randomIndex = Math.floor(Math.random() * funFacts.length);
+            const fact = funFacts[randomIndex];
+            document.getElementById('output').textContent = fact;
+        }
+
+        function generateShowerFact() {
+            const randomIndex = Math.floor(Math.random() * showerFacts.length);
+            const showerFact = showerFacts[randomIndex];
+            document.getElementById('output').textContent = showerFact;
+        }
+
+        function generateStory() {
+            const randomIndex = Math.floor(Math.random() * stories.length);
+            const story = stories[randomIndex];
+            document.getElementById('output').textContent = story;
+        }
+
+        function generateAskOut() {
+            const randomIndex = Math.floor(Math.random() * askOutLines.length);
+            const askOut = askOutLines[randomIndex];
+            document.getElementById('output').textContent = askOut;
         }
     </script>
-
 </body>
 </html>
