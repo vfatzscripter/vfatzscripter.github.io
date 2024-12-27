@@ -32,14 +32,13 @@
     </style>
 </head>
 <body>
-    <h1>English to UwU Translator</h1>
+    <h1>Generational Translator</h1>
     <textarea id="englishText" placeholder="Enter English text here..."></textarea><br>
-    <button onclick="translateToUwU()">Translate</button>
-    <button onclick="addFace()">Add Face</button>
-    <button onclick="addGenAlphaPhrases()">Add Gen Alpha/Beta Phrases</button>
-    <button onclick="addGenZPhrases()">Add Gen Z Phrases</button>
-    <button onclick="addGenYPhrases()">Add Gen Y (Millennial) Phrases</button>
-    <button onclick="addGenXPhrases()">Add Gen X Phrases</button>
+    <button onclick="translateToUwU()">Translate to UwU</button>
+    <button onclick="translateGenAlpha()">Translate to Gen Alpha/Beta</button>
+    <button onclick="translateGenZ()">Translate to Gen Z</button>
+    <button onclick="translateGenY()">Translate to Gen Y (Millennial)</button>
+    <button onclick="translateGenX()">Translate to Gen X</button>
     <div class="output" id="uwuText"></div>
 
     <script>
@@ -61,17 +60,7 @@
             document.getElementById("uwuText").textContent = text || "UwU, pwease entew some text >w<";
         }
 
-        function addFace() {
-            let text = document.getElementById("uwuText").textContent;
-            if (text.trim()) {
-                text += " (・`ω´・)";
-                document.getElementById("uwuText").textContent = text;
-            } else {
-                document.getElementById("uwuText").textContent = "UwU, pwease twanswate fiwst >w<";
-            }
-        }
-
-        function addGenAlphaPhrases() {
+        function translateGenAlpha() {
             const phrases = [
                 "Gyatt 💀", 
                 "Kai Cenat 🎥", 
@@ -89,10 +78,10 @@
                 "Yeet 🏀"
             ];
 
-            appendRandomPhrase(phrases);
+            replaceWithPhrases(phrases);
         }
 
-        function addGenZPhrases() {
+        function translateGenZ() {
             const phrases = [
                 "Slay 👑", 
                 "Periodt 💅", 
@@ -109,10 +98,10 @@
                 "Big yikes 😬"
             ];
 
-            appendRandomPhrase(phrases);
+            replaceWithPhrases(phrases);
         }
 
-        function addGenYPhrases() {
+        function translateGenY() {
             const phrases = [
                 "Adulting is hard 🏡", 
                 "Can’t even 🥲", 
@@ -127,10 +116,10 @@
                 "Totes adorbs 🥰"
             ];
 
-            appendRandomPhrase(phrases);
+            replaceWithPhrases(phrases);
         }
 
-        function addGenXPhrases() {
+        function translateGenX() {
             const phrases = [
                 "Gnarly 🤘", 
                 "Radical 🌊", 
@@ -144,17 +133,22 @@
                 "Totally tubular 🏄"
             ];
 
-            appendRandomPhrase(phrases);
+            replaceWithPhrases(phrases);
         }
 
-        function appendRandomPhrase(phrases) {
-            let text = document.getElementById("uwuText").textContent;
-            if (text.trim()) {
-                const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-                text += " " + randomPhrase;
-                document.getElementById("uwuText").textContent = text;
+        function replaceWithPhrases(phrases) {
+            let text = document.getElementById("englishText").value.trim();
+            if (text) {
+                let words = text.split(" ");
+                let translated = words.map(word => {
+                    if (Math.random() > 0.5) {
+                        return phrases[Math.floor(Math.random() * phrases.length)];
+                    }
+                    return word;
+                }).join(" ");
+                document.getElementById("uwuText").textContent = translated;
             } else {
-                document.getElementById("uwuText").textContent = "UwU, pwease twanswate fiwst >w<";
+                document.getElementById("uwuText").textContent = "Enter text to translate!";
             }
         }
     </script>
