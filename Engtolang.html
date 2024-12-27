@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English to UwU Translator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+        textarea {
+            width: 80%;
+            height: 100px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #eef;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>English to UwU Translator</h1>
+    <textarea id="englishText" placeholder="Enter English text here..."></textarea><br>
+    <button onclick="translateToUwU()">Translate</button>
+    <button onclick="addFace()">Add Face</button>
+    <button onclick="addGenAlphaPhrases()">Add Gen Alpha/Beta Phrases</button>
+    <button onclick="addGenZPhrases()">Add Gen Z Phrases</button>
+    <button onclick="addGenYPhrases()">Add Gen Y (Millennial) Phrases</button>
+    <button onclick="addGenXPhrases()">Add Gen X Phrases</button>
+    <div class="output" id="uwuText"></div>
+
+    <script>
+        function translateToUwU() {
+            let text = document.getElementById("englishText").value;
+
+            // Replace common patterns
+            text = text.replace(/r|l/g, "w");
+            text = text.replace(/R|L/g, "W");
+            text = text.replace(/n([aeiou])/g, "ny$1");
+            text = text.replace(/N([aeiou])/g, "Ny$1");
+            text = text.replace(/ove/g, "uv");
+            text = text.replace(/!+/g, " owo!");
+
+            // Add some UwU flair
+            text = text.replace(/\bi\b/g, "uwu");
+            text = text.replace(/\bI\b/g, "UwU");
+
+            document.getElementById("uwuText").textContent = text || "UwU, pwease entew some text >w<";
+        }
+
+        function addFace() {
+            let text = document.getElementById("uwuText").textContent;
+            if (text.trim()) {
+                text += " (・`ω´・)";
+                document.getElementById("uwuText").textContent = text;
+            } else {
+                document.getElementById("uwuText").textContent = "UwU, pwease twanswate fiwst >w<";
+            }
+        }
+
+        function addGenAlphaPhrases() {
+            const phrases = [
+                "Gyatt 💀", 
+                "Kai Cenat 🎥", 
+                "Rizz overload 🔥", 
+                "Sigma grindset 💪", 
+                "Skibidi toilet 🚽", 
+                "Fanum Tax 💸", 
+                "NPC energy 🤖", 
+                "No cap 🧢", 
+                "W Riz 🏆", 
+                "Sheesh 😮‍💨", 
+                "Slay 👑", 
+                "Goofy ahh 🤡", 
+                "Devious lick 😈", 
+                "Yeet 🏀"
+            ];
+
+            appendRandomPhrase(phrases);
+        }
+
+        function addGenZPhrases() {
+            const phrases = [
+                "Slay 👑", 
+                "Periodt 💅", 
+                "It's giving ✨", 
+                "Valid ✅", 
+                "Lowkey 🔥", 
+                "Highkey 🗣️", 
+                "Main character vibes 🌟", 
+                "Not the vibe 😭", 
+                "Bet 🤝", 
+                "Sus 🤔", 
+                "Lit 🔥", 
+                "Extra 💁", 
+                "Big yikes 😬"
+            ];
+
+            appendRandomPhrase(phrases);
+        }
+
+        function addGenYPhrases() {
+            const phrases = [
+                "Adulting is hard 🏡", 
+                "Can’t even 🥲", 
+                "Doggo 🐶", 
+                "Yaaas queen 👑", 
+                "Netflix and chill 🎥", 
+                "Bye, Felicia 👋", 
+                "On fleek 💅", 
+                "Squad goals 👫", 
+                "Shooketh 😱", 
+                "Basic af ☕", 
+                "Totes adorbs 🥰"
+            ];
+
+            appendRandomPhrase(phrases);
+        }
+
+        function addGenXPhrases() {
+            const phrases = [
+                "Gnarly 🤘", 
+                "Radical 🌊", 
+                "As if! 🙄", 
+                "Talk to the hand ✋", 
+                "Cowabunga! 🐢", 
+                "Whatever 🤷", 
+                "Cool beans 🫘", 
+                "Take a chill pill 💊", 
+                "Bodacious 🤩", 
+                "Totally tubular 🏄"
+            ];
+
+            appendRandomPhrase(phrases);
+        }
+
+        function appendRandomPhrase(phrases) {
+            let text = document.getElementById("uwuText").textContent;
+            if (text.trim()) {
+                const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+                text += " " + randomPhrase;
+                document.getElementById("uwuText").textContent = text;
+            } else {
+                document.getElementById("uwuText").textContent = "UwU, pwease twanswate fiwst >w<";
+            }
+        }
+    </script>
+</body>
+</html>
