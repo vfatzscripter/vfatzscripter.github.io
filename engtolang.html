@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English to UwU Translator</title>
+    <title>Generational and Morse Translator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,13 +32,14 @@
     </style>
 </head>
 <body>
-    <h1>Generational Translator</h1>
+    <h1>Generational and Morse Translator</h1>
     <textarea id="englishText" placeholder="Enter English text here..."></textarea><br>
     <button onclick="translateToUwU()">Translate to UwU</button>
     <button onclick="translateGenAlpha()">Translate to Gen Alpha/Beta</button>
     <button onclick="translateGenZ()">Translate to Gen Z</button>
     <button onclick="translateGenY()">Translate to Gen Y (Millennial)</button>
     <button onclick="translateGenX()">Translate to Gen X</button>
+    <button onclick="translateToMorse()">Translate to Morse Code</button>
     <div class="output" id="uwuText"></div>
 
     <script>
@@ -150,6 +151,23 @@
             } else {
                 document.getElementById("uwuText").textContent = "Enter text to translate!";
             }
+        }
+
+        function translateToMorse() {
+            const morseCode = {
+                "a": ".-", "b": "-...", "c": "-.-.", "d": "-..", "e": ".", 
+                "f": "..-.", "g": "--.", "h": "....", "i": "..", "j": ".---",
+                "k": "-.-", "l": ".-..", "m": "--", "n": "-.", "o": "---",
+                "p": ".--.", "q": "--.-", "r": ".-.", "s": "...", "t": "-",
+                "u": "..-", "v": "...-", "w": ".--", "x": "-..-", "y": "-.--", 
+                "z": "--..", "1": ".----", "2": "..---", "3": "...--", 
+                "4": "....-", "5": ".....", "6": "-....", "7": "--...",
+                "8": "---..", "9": "----.", "0": "-----", " ": " / "
+            };
+
+            let text = document.getElementById("englishText").value.trim().toLowerCase();
+            let translated = text.split("").map(char => morseCode[char] || char).join(" ");
+            document.getElementById("uwuText").textContent = translated || "Enter text to translate!";
         }
     </script>
 </body>
