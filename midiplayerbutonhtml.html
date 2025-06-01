@@ -81,21 +81,22 @@
         document.getElementById("midiFile").addEventListener("change", handleFile);
         document.getElementById("soundFontFile").addEventListener("change", loadSoundFont);
         document.getElementById("playMIDI").addEventListener("click", playMIDIFile);
+        
 
-        async function loadSoundFont(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = async function(e) {
-                    synth = new FluidSynth(new AudioContext());
-                    await synth.loadSoundFont(e.target.result);
-                    console.log("✅ SoundFont loaded!");
-                    soundFontLoaded = true;
-                    checkReadyState();
-                };
-                reader.readAsArrayBuffer(file);
-            }
+        
+        let synth;
+
+        async function initFluidSynth() {
+            try {
+            synth = new FluidSynth(new AudioContext());
+            console.log("✅ FluidSynth initialized successfully!");
+        } catch (error) {
+            console.error("❌ Error initializing FluidSynth:", error);
         }
+    }
+
+    initFluidSynth();
+
 
         function handleFile(event) {
             const file = event.target.files[0];
