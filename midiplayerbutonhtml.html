@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Piano with SoundFont</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tonejs/midi"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fluid-synth/web@latest"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .controls {
+            margin-bottom: 10px;
+        }
+        .piano {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .key {
+            width: 24px;
+            height: 100px;
+            border: 1px solid black;
+            background-color: white;
+            display: inline-block;
+            position: relative;
+        }
+        .key.black {
+            width: 16px;
+            height: 60px;
+            background-color: black;
+            position: absolute;
+            margin-left: -8px;
+            z-index: 1;
+        }
+        .active {
+            background-color: yellow !important;
+        }
+        #noteDisplay {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>MIDI Piano with SoundFont</h1>
+    <div class="controls">
+        <input type="file" id="midiFile" accept=".mid">
+        <input type="file" id="soundFontFile" accept=".sf2">
+        <button id="playMIDI" disabled>Play MIDI</button>
+    </div>
+    <div id="noteDisplay">Incoming Note: None</div>
+    <div class="piano" id="piano"></div>
+
+    <script>
+        const pianoContainer = document.getElementById("piano");
+        const noteDisplay = document.getElementById("noteDisplay");
+        const whiteKeys = [0, 2, 4, 5, 7, 9, 11];
+        let midiData = null;
+        let synth = null;
+        let soundFontLoaded = false;
+
+        // Create full 128-key piano
+        for (let i = 0; i < 128; i++) {
+            let key = document.createElement("div");
+            key.className = "key";
+            key.dataset.note = i;
+            pianoContainer.appendChild(key);
+
+            if (!whiteKeys.includes(i % 12)) {
+                let blackKey = document.createElement("div");
+                blackKey.className = "key black";
+                blackKey.dataset.note = i;
+                key.appendChild(blackKey);
+            }
+        }
+
+        document.getElementById("midiFile").addEventListener("change", handleFile);
+        document.getElementById("soundFontFile").addEventListener("change", loadSoundFont);
+        document.getElementById("playMIDI").addEventListener("click", playMIDIFile);
+
+        async function loadSoundFont(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    synth = new FluidSynth(new AudioContext());
+                    await synth.loadSoundFont(e.target.result);
+                    console.log("✅ SoundFont loaded!");
+                    soundFontLoaded = true;
+                    checkReadyState();
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        }
+
+        function handleFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    midiData = new Midi(e.target.result);
+                    console.log("✅ MIDI file loaded!");
+                    checkReadyState();
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        }
+
+        function checkReadyState() {
+            if (midiData && soundFontLoaded) {
+                document.getElementById("playMIDI").disabled = false;
+            }
+        }
+
+        function playMIDIFile() {
+            if (!midiData || !synth) {
+                alert("Please upload both MIDI and SoundFont files first!");
+                return;
+            }
+
+            console.log("🎵 Playing MIDI...");
+            midiData.tracks.forEach(track => {
+                track.notes.forEach(note => {
+                    setTimeout(() => {
+                        highlightKey(note.midi);
+                        synth.noteOn(0, note.midi, 127);
+                        setTimeout(() => synth.noteOff(0, note.midi), 300);
+                    }, note.time * 1000);
+                });
+            });
+        }
+
+        function highlightKey(note) {
+            const keys = document.querySelectorAll(".key");
+            keys.forEach(key => {
+                if (parseInt(key.dataset.note) === note) {
+                    key.classList.add("active");
+                    noteDisplay.textContent = `Incoming Note: ${note}`;
+                    setTimeout(() => key.classList.remove("active"), 300);
+                }
+            });
+        }
+
+        if (navigator.requestMIDIAccess) {
+            navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
+        }
+
+        function onMIDISuccess(midiAccess) {
+            midiAccess.inputs.forEach(input => {
+                input.onmidimessage = handleMIDIMessage;
+            });
+        }
+
+        function onMIDIFailure() {
+            console.log("Failed to access MIDI devices.");
+        }
+
+        function handleMIDIMessage(event) {
+            const note = event.data[1];
+            if (synth) {
+                synth.noteOn(0, note, 127);
+                setTimeout(() => synth.noteOff(0, note), 300);
+            }
+            highlightKey(note);
+        }
+    </script>
+</body>
+</html>
