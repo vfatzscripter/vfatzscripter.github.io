@@ -56,24 +56,12 @@
     <div class="piano" id="piano"></div>
 
     <script>
-        
-    async function initFluidSynth() {
-        try {
-            synth = new FluidSynth(new AudioContext());
-            console.log("✅ FluidSynth initialized successfully!");
-        } catch (error) {
-            console.error("❌ Error initializing FluidSynth:", error);
-        }
-    }
-
-    initFluidSynth();
-
         const pianoContainer = document.getElementById("piano");
         const noteDisplay = document.getElementById("noteDisplay");
         const whiteKeys = [0, 2, 4, 5, 7, 9, 11];
         let midiData = null;
         let synth = null;
-        let soundFontLoaded = false;
+        let soundFontLoaded = true;
 
         // Create full 128-key piano
         for (let i = 0; i < 128; i++) {
@@ -89,6 +77,17 @@
                 key.appendChild(blackKey);
             }
         }
+        
+    async function initFluidSynth() {
+        try {
+            synth = new FluidSynth(new AudioContext());
+            console.log("✅ FluidSynth initialized successfully!");
+        } catch (error) {
+            console.error("❌ Error initializing FluidSynth:", error);
+        }
+    }
+
+    initFluidSynth();
 
         document.getElementById("midiFile").addEventListener("change", handleFile);
         document.getElementById("soundFontFile").addEventListener("change", loadSoundFont);
