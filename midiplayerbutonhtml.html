@@ -56,6 +56,19 @@
     <div class="piano" id="piano"></div>
 
     <script>
+    let synth;
+
+    async function initFluidSynth() {
+        try {
+            synth = new FluidSynth(new AudioContext());
+            console.log("✅ FluidSynth initialized successfully!");
+        } catch (error) {
+            console.error("❌ Error initializing FluidSynth:", error);
+        }
+    }
+
+    initFluidSynth();
+
         const pianoContainer = document.getElementById("piano");
         const noteDisplay = document.getElementById("noteDisplay");
         const whiteKeys = [0, 2, 4, 5, 7, 9, 11];
@@ -83,20 +96,20 @@
         document.getElementById("playMIDI").addEventListener("click", playMIDIFile);
         
 
-        
-        let synth;
-
-        async function initFluidSynth() {
-            try {
-            synth = new FluidSynth(new AudioContext());
-            console.log("✅ FluidSynth initialized successfully!");
-        } catch (error) {
-            console.error("❌ Error initializing FluidSynth:", error);
+        async function loadSoundFont(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    synth = new FluidSynth(new AudioContext());
+                    await synth.loadSoundFont(e.target.result);
+                    console.log("✅ SoundFont loaded!");
+                    soundFontLoaded = true;
+                    checkReadyState();
+                };
+                reader.readAsArrayBuffer(file);
+            }
         }
-    }
-
-    initFluidSynth();
-
 
         function handleFile(event) {
             const file = event.target.files[0];
